@@ -55,6 +55,7 @@ class HashTable:
         Implement this, and/or DJB2.
         """
 
+        #Psuedocode
         """
         algorithm fnv-1 is
             hash := FNV_offset_basis do
@@ -85,7 +86,30 @@ class HashTable:
 
         Implement this, and/or FNV-1.
         """
+
+        
+        #Psuedocode in c
+        """
+        unsigned long
+        hash(unsigned char *str)
+        {
+            unsigned long hash = 5381;
+            int c;
+
+            while (c = *str++)
+                hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+            return hash;
+        }
+        """
         # Your code here
+
+        hash = 5381
+
+        for bytes in key:
+            hash = ((hash << 5) + hash) + ord(bytes)
+        return hash
+        
 
 
     def hash_index(self, key):
