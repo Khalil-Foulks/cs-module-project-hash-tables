@@ -22,7 +22,8 @@ class HashTable:
 
     def __init__(self, capacity):
         # Your code here
-
+        self.capacity = capacity
+        self.table = [None] * self.capacity
 
     def get_num_slots(self):
         """
@@ -35,7 +36,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
+        return len([None] * self.capacity)
 
     def get_load_factor(self):
         """
@@ -53,7 +54,28 @@ class HashTable:
         Implement this, and/or DJB2.
         """
 
+        """
+        algorithm fnv-1 is
+            hash := FNV_offset_basis do
+
+            for each byte_of_data to be hashed
+                hash := hash × FNV_prime
+                hash := hash XOR byte_of_data
+
+            return hash 
+        """
+
         # Your code here
+        fnv_offset_basis = 14695981039346656037
+        fnv_prime = 1099511628211
+
+        hash = fnv_offset_basis
+
+        for bytes in key:
+            hash = hash * fnv_prime
+            # XOR is '^'; ord() function returns the number representing the unicode code of a specified character.
+            hash = hash ^ ord(bytes)
+        return hash
 
 
     def djb2(self, key):
@@ -70,8 +92,8 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        #return self.fnv1(key) % self.capacity
-        return self.djb2(key) % self.capacity
+        return self.fnv1(key) % self.capacity
+        # return self.djb2(key) % self.capacity
 
     def put(self, key, value):
         """
@@ -82,6 +104,9 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+
+        self.table[index] = HashTableEntry(key,value)
 
 
     def delete(self, key):
@@ -104,6 +129,11 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        index = self.hash_index(key)
+
+        hash_key = self.table[index]
+        return hash_key.value
+
 
 
     def resize(self, new_capacity):
