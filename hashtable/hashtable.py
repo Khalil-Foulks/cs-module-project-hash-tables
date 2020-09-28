@@ -23,6 +23,7 @@ class HashTable:
     def __init__(self, capacity):
         # Your code here
         self.capacity = capacity
+        # creating a hash table containing a slot of None, the length of capaciity
         self.table = [None] * self.capacity
 
     def get_num_slots(self):
@@ -118,8 +119,16 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # store the hash_index as index
+        index = self.hash_index(key)
 
-
+        # check to see if key is not None at index
+        if self.table[index]:
+            # restore the key's value as None
+            self.put(key, None)
+        else:
+            return print("key not found")     
+        
     def get(self, key):
         """
         Retrieve the value stored with the given key.
