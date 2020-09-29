@@ -25,6 +25,8 @@ class HashTable:
         self.capacity = capacity
         # creating a hash table containing a slot of None, the length of capaciity
         self.table = [None] * self.capacity
+        
+        self.head = None
 
     def get_num_slots(self):
         """
@@ -129,9 +131,21 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        index = self.hash_index(key)
+        # # calculate index for key; store as index
+        # index = self.hash_index(key)
 
-        self.table[index] = HashTableEntry(key,value)
+        # # update the value in the table at the index with new key,value pair
+        # self.table[index] = HashTableEntry(key,value)
+
+        # ---------LINKED LIST IMPLEMENTATION-------------------
+        # calculate index for key; store as index
+        index = self.hash_index(key)
+        # create node(HashTableEntry)
+        node = HashTableEntry(key,value)
+        # update node.next to be current head
+        node.next = self.head
+        # insert node at index
+        self.table[index] = node
 
 
     def delete(self, key):
@@ -151,7 +165,9 @@ class HashTable:
             # restore the key's value as None
             self.put(key, None)
         else:
-            return print("key not found")     
+            return print("key not found")  
+
+    # ---------LINKED LIST IMPLEMENTATION-------------------   
         
     def get(self, key):
         """
@@ -162,10 +178,15 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # calculate index for key; store as index
         index = self.hash_index(key)
 
-        hash_key = self.table[index]
-        return hash_key.value
+        # store key/value table entry at index
+        table_entry = self.table[index]
+        # return table entries value
+        return table_entry.value
+    
+    # ---------LINKED LIST IMPLEMENTATION-------------------
 
 
 
