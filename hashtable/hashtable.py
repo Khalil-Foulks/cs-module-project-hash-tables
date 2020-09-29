@@ -154,15 +154,30 @@ class HashTable:
         node = HashTableEntry(key,value)
         
         # check if the linked list at that index for the key
+        # if LL is empty 
+        if self.get(key) is None:
+            # insert node at head of linked list at table index
+            self.table[index].head = node
+            # increase count by 1
+            self.item_count += 1
 
         # if the key is found, overwrite the value stored there
-        if self.get(key) is None:
-            # otherwise update node.next to be current head
-            node.next = self.head
-            # insert node at index
-            self.table[index] = node
         else:
-            self.table[index] = node
+            cur = self.table[index].head
+            # while cur is not pointing to None, search for the key
+            while cur.next:
+                # if cur key matches input key
+                if cur.key == key:
+                    # overwrite the value stored there input value
+                    cur.value = value
+                # otherwise traverse linked list
+                cur = cur.next
+
+            # otherwise update node.next to be current head
+            node.next = cur
+            # current head becomes the inserted node
+            cur = node
+
 
 
     def delete(self, key):
