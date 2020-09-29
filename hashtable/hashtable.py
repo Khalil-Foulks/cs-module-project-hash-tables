@@ -11,6 +11,9 @@ class HashTableEntry:
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
 
+class LinkedList:
+    def __init__(self):
+        self.head = None
 
 class HashTable:
     """
@@ -22,11 +25,16 @@ class HashTable:
 
     def __init__(self, capacity):
         # Your code here
+        # self.capacity = capacity
+        # # creating a hash table containing a slot of None, the length of capaciity
+        # self.table = [None] * self.capacity
+
+        # ---------LINKED LIST IMPLEMENTATION-------------------
         self.capacity = capacity
-        # creating a hash table containing a slot of None, the length of capaciity
-        self.table = [None] * self.capacity
-        
-        self.head = None
+        # creating a hash table containing a slot of empty Linked Lists, the length of capaciity
+        self.table = [LinkedList()] * self.capacity
+        self.item_count = 0
+
 
     def get_num_slots(self):
         """
@@ -48,6 +56,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
+
+        return self.item_count / len(self.table)
 
 
     def fnv1(self, key):
@@ -142,10 +152,17 @@ class HashTable:
         index = self.hash_index(key)
         # create node(HashTableEntry)
         node = HashTableEntry(key,value)
-        # update node.next to be current head
-        node.next = self.head
-        # insert node at index
-        self.table[index] = node
+        
+        # check if the linked list at that index for the key
+
+        # if the key is found, overwrite the value stored there
+        if self.get(key) is None:
+            # otherwise update node.next to be current head
+            node.next = self.head
+            # insert node at index
+            self.table[index] = node
+        else:
+            self.table[index] = node
 
 
     def delete(self, key):
@@ -156,19 +173,60 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        # # Your code here
+        # # store the hash_index as index
+        # index = self.hash_index(key)
+
+        # # check to see if key is not None at index
+        # if self.table[index]:
+        #     # restore the key's value as None
+        #     self.put(key, None)
+        # else:
+        #     return print("key not found")  
+
+    # ---------LINKED LIST IMPLEMENTATION-------------------   
         # store the hash_index as index
         index = self.hash_index(key)
 
-        # check to see if key is not None at index
-        if self.table[index]:
-            # restore the key's value as None
-            self.put(key, None)
-        else:
-            return print("key not found")  
+        # check to see if key is not None at index 
+        if self.get(key):
+            # check if the list is empty
+            if self.head is None:
+                return None
+            
+            # Deleting from head
+            if self.head.key == key:
+                # store current head node as old_head
+                old_head = self.head
+                # move head pointer to next node
+                self.head = self.head.next
+                # old head's next pointer should point to None
+                old_head.next = None
+                # return deleted Node
+                return old_head
 
-    # ---------LINKED LIST IMPLEMENTATION-------------------   
-        
+            # Deleting from anywhere that's not the head
+            # create prev pointer
+            prev = self.head
+            # create current node pointer
+            cur = self.head.next
+            while cur is not None: 
+                if cur.key == key:
+                    # prev next pointer becomes cur.next node
+                    prev.next = cur.next
+                    # cur.next now  points to None
+                    cur.next = None
+                    # return cur node
+                    return cur
+                # otherwise prev pointer moves down list
+                prev = prev.next
+                # cur pointer moves down list
+                cur = cur.next
+            # If we get here, we didn't find it
+            return None
+        else:
+            return print("key not found")
+
     def get(self, key):
         """
         Retrieve the value stored with the given key.
@@ -178,15 +236,39 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # # calculate index for key; store as index
+        # index = self.hash_index(key)
+
+        # # store key/value table entry at index
+        # table_entry = self.table[index]
+        # # return table entries value
+        # return table_entry.value
+    
+    # ---------LINKED LIST IMPLEMENTATION-------------------
         # calculate index for key; store as index
         index = self.hash_index(key)
 
-        # store key/value table entry at index
-        table_entry = self.table[index]
-        # return table entries value
-        return table_entry.value
-    
-    # ---------LINKED LIST IMPLEMENTATION-------------------
+        # store linkedlist at table index as linkedlist
+        linkedlist = self.table[index]
+
+        # create a pointer for current node
+        cur = linkedlist.head
+
+        # check if head is None
+        if cur is None:
+            return None
+         
+
+        # while current node is not None
+        while cur is not None:
+            # check if current node key matches value
+            if cur.key == key:
+                # if so return current
+                return cur.value
+            # otherwise move pointer to next node  
+            cur = cur.next
+        # return none if key is not in list
+        return None
 
 
 
