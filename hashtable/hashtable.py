@@ -153,9 +153,8 @@ class HashTable:
         # create node(HashTableEntry)
         node = HashTableEntry(key,value)
         
-        # check if the linked list at that index for the key
         # if LL is empty 
-        if self.get(key) is None:
+        if self.table[index].head is None:
             # insert node at head of linked list at table index
             self.table[index].head = node
             # increase count by 1
@@ -173,10 +172,11 @@ class HashTable:
                 # otherwise traverse linked list
                 cur = cur.next
 
-            # otherwise update node.next to be current head
-            node.next = cur
-            # current head becomes the inserted node
-            cur = node
+            # otherwise add new node to tail of LL 
+            # current next points to the inserted node
+            cur.next = node
+            # increment count 
+            self.item_count += 1
 
 
 
@@ -202,45 +202,46 @@ class HashTable:
     # ---------LINKED LIST IMPLEMENTATION-------------------   
         # store the hash_index as index
         index = self.hash_index(key)
+        cur = self.table[index].head
 
-        # check to see if key is not None at index 
-        if self.get(key):
-            # check if the list is empty
-            if self.head is None:
-                return None
-            
-            # Deleting from head
-            if self.head.key == key:
-                # store current head node as old_head
-                old_head = self.head
-                # move head pointer to next node
-                self.head = self.head.next
-                # old head's next pointer should point to None
-                old_head.next = None
-                # return deleted Node
-                return old_head
-
-            # Deleting from anywhere that's not the head
-            # create prev pointer
-            prev = self.head
-            # create current node pointer
-            cur = self.head.next
-            while cur is not None: 
-                if cur.key == key:
-                    # prev next pointer becomes cur.next node
-                    prev.next = cur.next
-                    # cur.next now  points to None
-                    cur.next = None
-                    # return cur node
-                    return cur
-                # otherwise prev pointer moves down list
-                prev = prev.next
-                # cur pointer moves down list
-                cur = cur.next
-            # If we get here, we didn't find it
+        # check if the list is empty
+        if cur is None:
             return None
-        else:
-            return print("key not found")
+        
+        # Deleting from head
+        if cur.key == key:
+            # store current head node as old_head
+            old_head = cur
+            # move head pointer to next node
+            cur = cur.next
+            # old head's next pointer should point to None
+            old_head.next = None
+            # return deleted Node
+            return old_head
+
+        # Deleting from anywhere that's not the head
+        # create prev pointer
+        prev = cur
+        # create current node pointer
+        cur = cur.next
+
+        while cur is not None: 
+            # if cur key matches input key
+            if cur.key == key:
+                # prev next pointer becomes cur.next node
+                prev.next = cur.next
+                # cur.next now  points to None
+                cur.next = None
+                # decrease count
+                self.item_count -= 1
+                # return cur node
+                return cur
+            # otherwise prev pointer moves down list
+            prev = prev.next
+            # cur pointer moves down list
+            cur = cur.next
+        # If we get here, we didn't find it
+        return None
 
     def get(self, key):
         """
@@ -295,7 +296,30 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        self.capacity = new_capacity
+        new_array = [LinkedList()] * new_capacity
 
+        # iterate through existing array
+        for slot in self.table:
+            # grab reference to head from each linked list
+            cur = slot.head
+            # iterate through linked list
+            while cur:
+                # generate a new index (capacity has changed - so will index)
+                index = self.hash_index(cur.key)
+                # check if the current list doesn't have a head, if not add one
+                if new_array[index].head == None:
+                    new_array[index].head = HashTableEntry(cur.key, cur.value)
+                # otherwise add a new node to the list
+                else:
+                    # creating new node
+                    node = HashTableEntry(cur.key, cur.value)
+                    # new node's next points to current head
+                    node.next = new_array[index].head
+                    # head of linked list becomes new node
+                    new_array[index].head = node 
+                cur = cur.next
+        self.table = new_array        
 
 
 if __name__ == "__main__":
