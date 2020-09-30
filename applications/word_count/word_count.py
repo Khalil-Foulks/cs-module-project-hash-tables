@@ -1,5 +1,26 @@
+import re
+
 def word_count(s):
     # Your code here
+
+    
+    d = {}
+    
+    # create an array of words
+    words = re.findall(r"(?<![@#])\b\w+(?:'\w+)?", s)
+
+    # for each word in words array
+    for word in words:
+        # check if the word lowercased is in the dictionary
+        if word.lower() not in d:
+            # add it and set it's value to 1 if it's not there already
+            d[word.lower()] = 1
+        # if it exists add 1 to count
+        else:
+            d[word.lower()] += 1
+
+    return d
+
 
 
 
