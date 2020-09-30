@@ -33,6 +33,7 @@ class HashTable:
         self.capacity = capacity
         # creating a hash table containing a slot of empty Linked Lists, the length of capaciity
         self.table = [LinkedList()] * self.capacity
+        # keeps track of # of items in hash table
         self.item_count = 0
 
 
@@ -214,7 +215,7 @@ class HashTable:
             self.table[index].head = self.table[index].head.next
             # decrement count
             self.item_count -= 1
-            return
+            
 
         # Deleting from anywhere that's not the head
         # create prev pointer
@@ -231,7 +232,6 @@ class HashTable:
                 cur.next = None
                 # decrement count
                 self.item_count -= 1
-                # return cur node
                 return None
             # otherwise prev pointer moves down list
             prev = prev.next
@@ -315,7 +315,9 @@ class HashTable:
                     node.next = new_array[index].head
                     # head of linked list becomes new node
                     new_array[index].head = node 
+                # traverse down original linked list
                 cur = cur.next
+        # new array becomes new hash table
         self.table = new_array        
 
 
