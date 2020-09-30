@@ -210,14 +210,11 @@ class HashTable:
         
         # Deleting from head
         if cur.key == key:
-            # store current head node as old_head
-            old_head = cur
-            # move head pointer to next node
-            cur = cur.next
-            # old head's next pointer should point to None
-            old_head.next = None
-            # return deleted Node
-            return old_head
+            # head of list becomes old head's next node 
+            self.table[index].head = self.table[index].head.next
+            # decrement count
+            self.item_count -= 1
+            return
 
         # Deleting from anywhere that's not the head
         # create prev pointer
@@ -230,12 +227,12 @@ class HashTable:
             if cur.key == key:
                 # prev next pointer becomes cur.next node
                 prev.next = cur.next
-                # cur.next now  points to None
+                # cur.next now points to None
                 cur.next = None
-                # decrease count
+                # decrement count
                 self.item_count -= 1
                 # return cur node
-                return cur
+                return None
             # otherwise prev pointer moves down list
             prev = prev.next
             # cur pointer moves down list
