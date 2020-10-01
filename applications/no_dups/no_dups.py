@@ -12,7 +12,7 @@ def no_dups(s):
     for word in words:
         # if word lowercased is not in dictinary
         if word.lower() not in d:
-            # add the word as a key and string value
+            # add the word as a key and string value to dictionary
             d[word.lower()] = f'{word.lower()}'
     # combine all items in dictionary into a string
     return ' '.join(d)

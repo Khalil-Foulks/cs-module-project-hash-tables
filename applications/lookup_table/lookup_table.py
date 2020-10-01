@@ -18,13 +18,15 @@ def slowfun(x, y):
     """
     # Your code here
     
+    # check if (x,y) key is in cache
     if (x,y) not in cache:   
         v = math.pow(x, y)
         v = math.factorial(v)
         v //= (x + y)
         v %= 982451653
+        # if not in cache, store (x,y) as key with v as a value
         cache[(x,y)] = v
-        
+    # return value of key    
     return cache[(x,y)]
 
 
