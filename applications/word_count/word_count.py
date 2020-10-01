@@ -6,8 +6,8 @@ def word_count(s):
     
     d = {}
     
-    # create an array of words
-    words = re.findall(r"(?<![@#])\b\w+(?:'\w+)?", s)
+    # create an array of words that includes [a-zA-Z0-9_] + apostrophes before word characters
+    words = re.findall(r"\w+(?:'\w+)?", s)
 
     # for each word in words array
     for word in words:
